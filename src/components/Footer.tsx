@@ -21,7 +21,7 @@ export function Footer() {
           </a>{" "}
           under CC BY / CC BY-SA / CC0 / public-domain licenses — per-image credits in the{" "}
           <a
-            href="/credits.html"
+            href="credits.html"
             className="text-silver underline decoration-white/20 underline-offset-4 transition-colors hover:text-accent-hi"
           >
             full attribution list

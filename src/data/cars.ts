@@ -31,7 +31,7 @@ export const CATEGORIES = [
   "Electric",
 ] as const;
 
-export const CARS: Car[] = [
+const RAW_CARS: Car[] = [
   {
     id: "porsche-911-gt3",
     brand: "Porsche",
@@ -346,7 +346,18 @@ export const CARS: Car[] = [
   },
 ];
 
-export const HERO_IMAGE = "/cars/rimac-nevera.jpg";
+// Resolve image paths against the build base so the output works both when
+// served from a web root and when opened directly from disk (file://).
+const ASSET_BASE = import.meta.env.BASE_URL;
+const withBase = (src: string) => `${ASSET_BASE}${src.replace(/^\//, "")}`;
+
+export const CARS: Car[] = RAW_CARS.map((car) => ({
+  ...car,
+  image: withBase(car.image),
+  gallery: car.gallery.map(withBase),
+}));
+
+export const HERO_IMAGE = withBase("/cars/rimac-nevera.jpg");
 export const FEATURED_CAR = CARS.find((c) => c.id === "lamborghini-revuelto")!;
 
 export const BRANDS = [...new Set(CARS.map((c) => c.brand))].sort();
