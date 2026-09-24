@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Env
+.env
+.env.*
+
+# Session scratch files
+fetch-cars*.ps1
+commons-credits*.json
+contact-sheet*.html
+rr.json
+mb.json
+bt.json
+cv.json
+16

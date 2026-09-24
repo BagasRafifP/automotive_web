@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA Motors — Premium Car Showcase</title>
+<style>
+/* ============ Reset & Tokens ============ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#060a12;
+  --bg-2:#0a101c;
+  --panel:rgba(17,25,44,.55);
+  --panel-solid:#131c30;
+  --line:rgba(96,140,255,.16);
+  --line-strong:rgba(96,140,255,.38);
+  --accent:#3b82f6;
+  --accent-2:#60a5fa;
+  --accent-soft:rgba(59,130,246,.14);
+  --text:#e8edf7;
+  --text-dim:#9aa6bd;
+  --radius:20px;
+  --shadow-glow:0 20px 60px -20px rgba(59,130,246,.45);
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* ambient glow layers */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(900px 500px at 85% -10%, rgba(59,130,246,.16), transparent 60%),
+    radial-gradient(700px 400px at 5% 15%, rgba(59,130,246,.07), transparent 60%),
+    radial-gradient(600px 500px at 50% 110%, rgba(59,130,246,.06), transparent 60%);
+}
+body::after{ /* subtle grid texture */
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(96,140,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96,140,255,.035) 1px, transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse at 50% 0%, black 0%, transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse at 50% 0%, black 0%, transparent 75%);
+}
+
+::selection{background:rgba(59,130,246,.35)}
+
+img{display:block;max-width:100%}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+/* ============ Navbar ============ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  background:rgba(6,10,18,.72);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:1200px;margin:0 auto;padding:0 24px;
+  height:68px;display:flex;align-items:center;justify-content:space-between;
+}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:2px;text-decoration:none;color:var(--text)}
+.logo-mark{
+  width:26px;height:26px;border-radius:8px;
+  background:linear-gradient(135deg,var(--accent),#1d4ed8);
+  display:grid;place-items:center;font-size:13px;font-weight:900;color:#fff;
+  box-shadow:0 0 18px rgba(59,130,246,.55);
+}
+.logo span.dot{color:var(--accent-2)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{color:var(--text-dim);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{
+  padding:9px 20px;border-radius:99px;font-size:14px;font-weight:600;
+  background:linear-gradient(135deg,var(--accent),#2563eb);color:#fff;
+  box-shadow:0 8px 24px -8px rgba(59,130,246,.7);
+  transition:transform .2s, box-shadow .2s;
+}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 12px 32px -8px rgba(59,130,246,.85)}
+
+/* ============ Hero ============ */
+.hero{
+  min-height:92vh;display:flex;flex-direction:column;justify-content:center;
+  max-width:1200px;margin:0 auto;padding:140px 24px 80px;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;width:fit-content;
+  padding:7px 16px;border-radius:99px;margin-bottom:28px;
+  border:1px solid var(--line);background:rgba(13,20,38,.6);
+  font-size:13px;color:var(--text-dim);
+}
+.hero-badge .pulse{
+  width:7px;height:7px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 0 0 rgba(59,130,246,.6);animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(59,130,246,.55)}
+  70%{box-shadow:0 0 0 9px rgba(59,130,246,0)}
+  100%{box-shadow:0 0 0 0 rgba(59,130,246,0)}
+}
+.hero h1{
+  font-size:clamp(2.6rem,6vw,4.6rem);font-weight:800;line-height:1.08;
+  letter-spacing:-1.5px;max-width:820px;
+  background:linear-gradient(120deg,#f4f7ff 30%,#9db9ff 75%,#6d9aff);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+.hero p.sub{
+  margin-top:24px;max-width:560px;font-size:17px;color:var(--text-dim);
+}
+.hero-actions{margin-top:40px;display:flex;gap:16px;flex-wrap:wrap}
+.btn-primary{
+  padding:14px 32px;border-radius:14px;font-weight:600;font-size:15px;color:#fff;
+  background:linear-gradient(135deg,var(--accent),#2563eb);
+  box-shadow:0 12px 32px -10px rgba(59,130,246,.8);
+  transition:transform .2s, box-shadow .2s;
+}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 40px -10px rgba(59,130,246,.95)}
+.btn-ghost{
+  padding:14px 32px;border-radius:14px;font-weight:600;font-size:15px;
+  border:1px solid var(--line-strong);color:var(--text);
+  background:rgba(13,20,38,.4);transition:background .2s, transform .2s;
+}
+.btn-ghost:hover{background:rgba(59,130,246,.12);transform:translateY(-3px)}
+
+.hero-stats{
+  margin-top:72px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:640px;
+}
+.stat{
+  padding:20px 24px;border-radius:16px;
+  border:1px solid var(--line);background:rgba(13,20,38,.5);
+}
+.stat .num{font-size:26px;font-weight:800;letter-spacing:-.5px;color:#dbe6ff}
+.stat .num span{color:var(--accent-2)}
+.stat .lbl{font-size:12px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase}
+
+/* ============ Sections ============ */
+.section{max-width:1200px;margin:0 auto;padding:90px 24px}
+.section-head{margin-bottom:40px}
+.section-head .kicker{font-size:13px;font-weight:600;letter-spacing:2px;color:var(--accent-2);text-transform:uppercase}
+.section-head h2{font-size:clamp(1.7rem,3.4vw,2.3rem);font-weight:800;letter-spacing:-.8px;margin-top:8px}
+.section-head p{color:var(--text-dim);margin-top:10px;max-width:600px}
+
+/* ============ Filters ============ */
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px}
+.filter-pill{
+  padding:10px 22px;border-radius:99px;font-size:14px;font-weight:500;
+  border:1px solid var(--line);background:rgba(13,20,38,.5);color:var(--text-dim);
+  transition:all .2s;
+}
+.filter-pill:hover{border-color:var(--line-strong);color:var(--text)}
+.filter-pill.active{
+  background:linear-gradient(135deg,var(--accent),#2563eb);color:#fff;
+  border-color:transparent;box-shadow:0 8px 24px -8px rgba(59,130,246,.8);
+}
+
+/* ============ Grid & Cards ============ */
+.showcase{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px}
+.card{
+  border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--line);background:var(--panel);
+  cursor:pointer;transition:transform .3s, border-color .3s, box-shadow .3s;
+  animation:cardIn .5s backwards;
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.card:hover{
+  transform:translateY(-8px);border-color:var(--line-strong);
+  box-shadow:var(--shadow-glow);
+}
+.card-img{aspect-ratio:16/10;overflow:hidden;background:var(--bg-2)}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.card:hover .card-img img{transform:scale(1.08)}
+.card-body{padding:18px 20px 20px}
+.card-tag{
+  display:inline-block;font-size:11px;font-weight:600;letter-spacing:1px;
+  color:var(--accent-2);text-transform:uppercase;margin-bottom:6px;
+}
+.card-name{font-size:17px;font-weight:700;letter-spacing:-.2px}
+.card-meta{display:flex;justify-content:space-between;margin-top:4px;font-size:13px;color:var(--text-dim)}
+.card-meta .hp{color:#cdd9f2;font-weight:600}
+
+/* ============ About ============ */
+.about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center}
+.about-text p{color:var(--text-dim);font-size:16px;margin-bottom:16px}
+.about-feats{display:grid;gap:14px}
+.feat{
+  display:flex;gap:14px;align-items:flex-start;
+  padding:18px 20px;border-radius:14px;
+  border:1px solid var(--line);background:rgba(13,20,38,.5);
+}
+.feat .icon{
+  width:34px;height:34px;flex:none;border-radius:9px;font-size:15px;
+  background:var(--accent-soft);color:var(--accent-2);
+  display:grid;place-items:center;
+}
+.feat h3{font-size:14.5px;font-weight:600}
+.feat p{font-size:13px;color:var(--text-dim);margin-top:2px}
+
+/* ============ Modal ============ */
+.modal{
+  position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:24px;
+  background:rgba(3,6,13,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.modal.open{opacity:1;pointer-events:auto}
+.modal-dialog{
+  width:min(680px,100%);max-height:calc(100vh - 48px);overflow-y:auto;
+  border-radius:24px;border:1px solid var(--line-strong);background:var(--panel-solid);
+  transform:translateY(26px) scale(.97);transition:transform .3s;
+}
+.modal.open .modal-dialog{transform:none}
+.modal-img{aspect-ratio:16/9;overflow:hidden;background:var(--bg-2)}
+.modal-img img{width:100%;height:100%;object-fit:cover}
+.modal-body{padding:26px 28px 30px}
+.modal-close{
+  position:absolute;top:18px;right:18px;width:38px;height:38px;border-radius:50%;
+  background:rgba(6,10,18,.7);border:1px solid var(--line);color:var(--text);
+  display:grid;place-items:center;font-size:17px;transition:background .2s;
+}
+.modal-close:hover{background:rgba(59,130,246,.25)}
+.modal-tag{font-size:12px;font-weight:600;letter-spacing:1.5px;color:var(--accent-2);text-transform:uppercase}
+.modal-title{font-size:24px;font-weight:800;letter-spacing:-.5px;margin-top:4px}
+.meta-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{
+  padding:6px 14px;border-radius:99px;font-size:12.5px;font-weight:500;
+  border:1px solid var(--line);background:rgba(13,20,38,.6);color:var(--text-dim);
+}
+.spec-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px;
+}
+.spec{
+  padding:14px 18px;border-radius:12px;
+  border:1px solid var(--line);background:rgba(13,20,38,.5);
+}
+.spec .v{font-size:17px;font-weight:800;color:#dbe6ff;letter-spacing:-.2px}
+.spec .v small{font-size:11px;font-weight:600;color:var(--accent-2)}
+.spec .k{font-size:11px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase}
+.modal-desc{margin-top:20px;font-size:14.5px;color:var(--text-dim)}
+
+/* ============ Footer ============ */
+footer{
+  border-top:1px solid var(--line);margin-top:40px;
+  padding:36px 24px;text-align:center;color:var(--text-dim);font-size:13px;
+}
+footer b{color:#cdd9f2}
+
+/* ============ Responsive ============ */
+@media (max-width:860px){
+  .about-grid{grid-template-columns:1fr;gap:44px}
+  .nav-links{display:none}
+}
+@media (max-width:560px){
+  .hero-stats{grid-template-columns:1fr}
+  .spec-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ Navbar ============ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="#">
+      <span class="logo-mark">A</span>
+      AURA<span class="dot">.</span>
+    </a>
+    <div class="nav-links">
+      <a href="#showcase">Showcase</a>
+      <a href="#about">Tentang</a>
+    </div>
+    <a href="#showcase" class="nav-cta">Jelajahi</a>
+  </div>
+</nav>
+
+<!-- ============ Hero ============ -->
+<header class="hero">
+  <div class="hero-badge"><span class="pulse"></span>2025 Collection — 16 Ikon Performa</div>
+  <h1>Performa Murni. Tanpa Kompromi.</h1>
+  <p class="sub">Kurasi ikon otomotif dunia — dari supercar listrik generasi baru hingga legenda JDM yang menentukan era. Klik setiap mobil untuk melihat detail lengkapnya.</p>
+  <div class="hero-actions">
+    <a href="#showcase" class="btn-primary">Lihat Showcase</a>
+    <a href="#about" class="btn-ghost">Tentang Kami</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="num">16<span>+</span></div><div class="lbl">Ikon Otomotif</div></div>
+    <div class="stat"><div class="num">4</div><div class="lbl">Kategori Kurasi</div></div>
+    <div class="stat"><div class="num">10.3<span>K HP</span></div><div class="lbl">Total Tenaga</div></div>
+  </div>
+</header>
+
+<!-- ============ Showcase ============ -->
+<section class="section" id="showcase">
+  <div class="section-head">
+    <div class="kicker">Showcase</div>
+    <h2>Ikon Pilihan</h2>
+    <p>Setiap mobil dipilih berdasarkan desain, inovasi teknologi, dan warisannya di dunia otomotif.</p>
+  </div>
+  <div class="filters" id="filters"></div>
+  <div class="showcase" id="grid"></div>
+</section>
+
+<!-- ============ About ============ -->
+<section class="section" id="about">
+  <div class="section-head">
+    <div class="kicker">Tentang</div>
+    <h2>Kurasi Tanpa Kompromi</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>AURA adalah kurasi ikon otomotif — bukan sekadar daftar mobil, tapi seleksi mesin, desain, dan cerita yang membentuk industri. Kami mengelompokkan setiap ikon ke dalam kategori yang mewakili karakternya.</p>
+      <p>Dari kekencangan supercar listrik Rimac hingga keanggunan Rolls-Royce, hingga jiwa balap legenda JDM — setiap mobil punya alasan untuk berada di sini.</p>
+    </div>
+    <div class="about-feats">
+      <div class="feat"><span class="icon">◆</span><div><h3>Kurasi Spesialis</h3><p>Setiap ikon dianalisis dari performa, warisan, dan desain.</p></div></div>
+      <div class="feat"><span class="icon">◆</span><div><h3>Data Lengkap</h3><p>Spesifikasi, tenaga, dan performa akurat di setiap kartu.</p></div></div>
+      <div class="feat"><span class="icon">◆</span><div><h3>Empat Kategori</h3><p>Supercar, Sports, JDM, dan Luxury — masing-masing dengan karakter kuat.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Modal ============ -->
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="modal-dialog">
+    <button class="modal-close" id="modalClose" aria-label="Tutup">✕</button>
+    <div class="modal-img"><img id="modalImg" src="" alt=""></div>
+    <div class="modal-body">
+      <div class="modal-tag" id="modalTag"></div>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="meta-chips" id="modalChips"></div>
+      <div class="spec-grid" id="modalSpecs"></div>
+      <p class="modal-desc" id="modalDesc"></p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Dibuat dengan presisi untuk <b>AURA Motors</b> — Premium Car Showcase.
+</footer>
+
+<script>
+/* ================= Data ================= */
+const CATS = ["All", "Supercar", "Sports", "JDM", "Luxury"];
+
+const CARS = [
+  {
+    name: "Ferrari 488 Pista",
+    cat: "Supercar", year: 2018,
+    engine: "3.9L V8 Twin-Turbo", power: 710,
+    accel: "2.9s", topSpeed: "340 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Ferrari_488_Pista_Genf_2018.jpg?width=1200",
+    desc: "Pista — bahasa Italia untuk 'lintas balap'. Versi paling ekstrem dari 488 dengan tenaga tertinggi di kelasnya saat diluncurkan, diturunkan langsung dari pengalaman Ferrari di kompetisi GT."
+  },
+  {
+    name: "Lamborghini Revuelto",
+    cat: "Supercar", year: 2023,
+    engine: "6.5L V12 + E-Motor Hybrid", power: 1001,
+    accel: "2.5s", topSpeed: "350 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Lamborghini_Revuelto_DSC_6987.jpg?width=1200",
+    desc: "Penerus Aventador yang memadukan legenda V12 aspirasi alami Lamborghini dengan sistem hybrid generasi baru. Getaran mesin V12 alami tetap menjadi jantung emosionalnya."
+  },
+  {
+    name: "McLaren 720S",
+    cat: "Supercar", year: 2017,
+    engine: "4.0L V8 Twin-Turbo", power: 710,
+    accel: "2.9s", topSpeed: "341 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/McLaren_720S,_IAA_2017,_%281Y7A3405%29.jpg?width=1200",
+    desc: "Super series generasi kedua dengan monokul lightweight McLaren dan aerodinamika aktif. Dikenal sebagai salah satu superka dengan rasio performa-harga terbaik di dekadenya."
+  },
+  {
+    name: "Rimac Nevera R",
+    cat: "Supercar", year: 2024,
+    engine: "Quad Electric Motors", power: 2107,
+    accel: "1.81s", topSpeed: "412 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Rimac_Nevera_R_Auto_Zuerich_2024_DSC_6340.jpg?width=1200",
+    desc: "Hypercar listrik dari Kroasia yang menulis ulang batas fisika. Versi R dengan penggerak roda belakang lebih agresif — akselerasi 0-100 km/jam dalam waktu kurang dari dua detik."
+  },
+  {
+    name: "Porsche 911 GT3 (992)",
+    cat: "Sports", year: 2021,
+    engine: "4.0L Flat-6 Aspirasi Alami", power: 502,
+    accel: "3.4s", topSpeed: "318 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Porsche_992_GT3_with_touring_package_1X7A6511.jpg?width=1200",
+    desc: "Ikon naturally aspirated di era turbo — mesin flat-6 dengan redline 9.000 RPM yang dipakai langsung dari Porsche Motorsport. Presisi Jerman dalam bentuk paling murni."
+  },
+  {
+    name: "Porsche 911 GT3 RS",
+    cat: "Sports", year: 2022,
+    engine: "4.0L Flat-6 Aspirasi Alami", power: 518,
+    accel: "3.2s", topSpeed: "296 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Porsche_911_GT3_RS_%282022%29_1X7A7164.jpg?width=1200",
+    desc: "Versi paling ekstrem dari 992 dengan downforce aktif dan aerodinamika balap. Dirancang untuk lintasan, tetap legal untuk jalan raya — filosofi motorsport dalam bentuk paling murni."
+  },
+  {
+    name: "Chevrolet Corvette C8 Stingray",
+    cat: "Sports", year: 2023,
+    engine: "6.2L V8 Aspirasi Alami", power: 495,
+    accel: "3.0s", topSpeed: "312 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/2023_Chevrolet_Corvette_Stingray,_front_right,_06-01-2024.jpg?width=1200",
+    desc: "Generasi revolusioner Corvette — mesin V8 dipindah ke tengah untuk pertama kalinya dalam sejarah. Amerika membuktikan bahwa eksotik tidak harus berharga Eropa."
+  },
+  {
+    name: "Ford Mustang Shelby GT500",
+    cat: "Sports", year: 2020,
+    engine: "5.2L V8 Supercharged", power: 760,
+    accel: "3.3s", topSpeed: "290 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/2020_Ford_Mustang_Shelby_GT500_GT101.jpg?width=1200",
+    desc: "Muscle car paling kuat yang pernah dibuat Ford. V8 supercharged 5.2L 'Predator' dengan transmisi kopling ganda — muscle Amerika yang menembus wilayah supercar."
+  },
+  {
+    name: "Toyota GR Supra",
+    cat: "JDM", year: 2021,
+    engine: "3.0L Inline-6 Turbo", power: 382,
+    accel: "4.1s", topSpeed: "250 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/D%C3%BClmen,_Auto_Bertels,_Toyota_GR_Supra_--_2021_--_9552-4.jpg?width=1200",
+    desc: "Kembalinya legenda setelah dua dekade. Inline-6 turbo dengan tuning khas GR — warisan A80 dibangun ulang untuk era modern dengan kemitraan bersama BMW."
+  },
+  {
+    name: "Nissan GT-R R35",
+    cat: "JDM", year: 2017,
+    engine: "3.8L V6 Twin-Turbo", power: 565,
+    accel: "2.8s", topSpeed: "315 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/2017_Nissan_GT-R_Recaro.jpg?width=1200",
+    desc: "Godzilla — sang pembunuh supercar Eropa. Twin-turbo V6 dengan sistem AWD legendaris dan transmisi dual-clutch yang memukul lebih keras dari apa pun di kelas harga masing-masing."
+  },
+  {
+    name: "Mazda RX-7 FD3S",
+    cat: "JDM", year: 1995,
+    engine: "1.3L Twin-Rotor 13B-REW", power: 276,
+    accel: "5.1s", topSpeed: "250 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Mazda_GF-FD3S_RX-7_Type_RS_%2823021116283%29.jpg?width=1200",
+    desc: "Ikon rotary sejati — mesin twin-rotor 13B-REW dengan desain bodi yang dianggap salah satu tercantik sepanjang era 90-an. Kompresi tenaga khas rotary yang tidak dapat ditiru mesin piston."
+  },
+  {
+    name: "Mitsubishi Lancer Evolution IX",
+    cat: "JDM", year: 2005,
+    engine: "2.0L Inline-4 Turbo", power: 286,
+    accel: "4.6s", topSpeed: "240 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/TNRT_Fernando_Peres_Mitsubishi_Evo_IX_04.jpg?width=1200",
+    desc: "Sang juara WRC versi jalan raya. Sistem AWD S-AWC legendaris dan mesin 4G63 yang telah terbukti di arena rally dunia — ikon rally dalam bentuk paling otentik."
+  },
+  {
+    name: "Subaru WRX STI S207",
+    cat: "JDM", year: 2016,
+    engine: "2.0L Boxer-4 Turbo", power: 304,
+    accel: "4.8s", topSpeed: "250 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Osaka_Auto_Messe_2016_%28562%29_-_Subaru_WRX_STI_S207_%28CBA-VAB%29.jpg?width=1200",
+    desc: "Edisi terbatas khusus pasar Jepang dari sang juara WRC. Boxer-4 turbo dengan sentuhan STI Jepang — suara rumble boxer yang khas dan warisan rally dalam satu paket."
+  },
+  {
+    name: "Rolls-Royce Phantom VIII",
+    cat: "Luxury", year: 2018,
+    engine: "6.75L V12 Twin-Turbo", power: 563,
+    accel: "5.1s", topSpeed: "250 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Rolls-Royce_Phantom_VIII_Series_I_IMG_9101.jpg?width=1200",
+    desc: "The best car in the world — klaim yang tidak pernah terdengar berlebihan dari Goodwood. V12 senyap, kabin tenang, dan kehadiran yang membungkam keramaian di mana pun berhenti."
+  },
+  {
+    name: "Mercedes-Maybach S 580",
+    cat: "Luxury", year: 2021,
+    engine: "4.0L V8 Turbo", power: 496,
+    accel: "4.4s", topSpeed: "250 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Mercedes-Maybach_S_580_Night_Edition_%28Z223%29_front.jpg?width=1200",
+    desc: "Luxury sedan puncak Mercedes-Benz dengan basis S-Class yang diperpanjang. Ditenangai V8 dengan sistem EQ Boost — standar kemewahan modern untuk mereka yang diantarkan, bukan mengemudi."
+  },
+  {
+    name: "Bentley Continental GT Speed",
+    cat: "Luxury", year: 2022,
+    engine: "6.0L W12 Twin-Turbo", power: 650,
+    accel: "3.5s", topSpeed: "335 km/h",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Bentley_Continental_GT_Speed_%283rd_gen.%29_IMG_0014.jpg?width=1200",
+    desc: "GT paling kuat yang pernah dibuat Bentley. W12 twin-turbo 6.0L dengan kemewahan tanpa kompromi — mobil untuk menempuh benua dengan kecepatan balap dan ketenangan lounge."
+  }
+];
+
+/* ================= Filters ================= */
+const cats = ["All", ...new Set(CARS.map(c => c.cat))];
+let activeCat = "All";
+
+const filtersEl = document.getElementById("filters");
+const gridEl = document.getElementById("grid");
+
+function renderFilters() {
+  filtersEl.innerHTML = cats.map(c =>
+    `<button class="filter-pill ${c === activeCat ? "active" : ""}" data-cat="${c}">${c === "All" ? "Semua" : c}</button>`
+  ).join("");
+}
+
+filtersEl.addEventListener("click", e => {
+  const pill = e.target.closest(".filter-pill");
+  if (!pill) return;
+  activeCat = pill.dataset.cat;
+  renderFilters();
+  renderGrid();
+});
+
+/* ================= Grid ================= */
+function visibleCars() {
+  return activeCat === "All" ? CARS : CARS.filter(c => c.cat === activeCat);
+}
+
+function renderGrid() {
+  gridEl.innerHTML = visibleCars().map((c, i) => `
+    <article class="card" data-idx="${i}" style="animation-delay:${i * 55}ms">
+      <div class="card-img"><img src="${c.image}" alt="${c.name}" loading="lazy"></div>
+      <div class="card-body">
+        <span class="card-tag">${c.cat} · ${c.year}</span>
+        <div class="card-name">${c.name}</div>
+        <div class="card-meta">
+          <span>${c.engine}</span>
+          <span class="hp">${c.power} HP</span>
+        </div>
+      </div>
+    </article>
+  `).join("");
+}
+
+gridEl.addEventListener("click", e => {
+  const card = e.target.closest(".card");
+  if (!card) return;
+  openModal(visibleCars()[+card.dataset.idx]);
+});
+
+/* ================= Modal ================= */
+const modal = document.getElementById("modal");
+const els = {
+  img: document.getElementById("modalImg"),
+  tag: document.getElementById("modalTag"),
+  title: document.getElementById("modalTitle"),
+  chips: document.getElementById("modalChips"),
+  specs: document.getElementById("modalSpecs"),
+  desc: document.getElementById("modalDesc"),
+};
+
+function openModal(c) {
+  els.img.src = c.image;
+  els.img.alt = c.name;
+  els.tag.textContent = `${c.cat} — ${c.year}`;
+  els.title.textContent = c.name;
+  els.chips.innerHTML = [c.year, c.cat, `${c.power} HP`, c.accel + " (0-100)"]
+    .map(t => `<span class="chip">${t}</span>`).join("");
+  els.specs.innerHTML = [
+    { v: c.engine, k: "Engine" },
+    { v: c.power + " <small>HP</small>", k: "Power" },
+    { v: c.accel, k: "0-100 km/h" },
+    { v: c.topSpeed, k: "Top Speed" },
+  ].map(s => `<div class="spec"><div class="v">${s.v}</div><div class="k">${s.k}</div></div>`).join("");
+  els.desc.textContent = c.desc;
+  modal.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal() {
+  modal.classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+document.getElementById("modalClose").addEventListener("click", closeModal);
+modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+/* ================= Init ================= */
+renderFilters();
+renderGrid();
+</script>
+</body>
+</html>

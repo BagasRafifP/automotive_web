@@ -1,0 +1,249 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Deep-space cinematic palette — blue-black cosmos */
+  --color-bg: #04060d;
+  --color-surface: #080b13;
+  --color-charcoal: #0d1017;
+  --color-graphite: #141823;
+  --color-fg: #f2f4f7;
+  --color-silver: #c7ccd4;
+  --color-muted: #8b929c;
+  --color-faint: #5c636d;
+  --color-accent: #3d7dff;
+  --color-accent-hi: #6fa3ff;
+
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-bg);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-body);
+  text-rendering: geometricPrecision;
+  overflow-x: hidden;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(61, 125, 255, 0.35);
+  color: #fff;
+}
+
+/* Cinematic scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-graphite);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #262c34;
+}
+
+/* Custom cursor — fine pointers only, applied by JS */
+@media (pointer: fine) {
+  html.custom-cursor,
+  html.custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+/* Hide horizontal scrollbars on swipe rows but keep scrollability */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Subtle glass panel */
+.glass {
+  background: rgba(13, 16, 23, 0.55);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Cinematic image grading — unifies photography into the dark theme */
+.cine {
+  filter: saturate(0.82) contrast(1.08) brightness(0.92);
+}
+
+/* Vignette overlay for photography */
+.vignette::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(4, 6, 13, 0.25) 0%, rgba(4, 6, 13, 0) 30%, rgba(4, 6, 13, 0) 55%, rgba(4, 6, 13, 0.82) 100%),
+    radial-gradient(120% 90% at 50% 40%, rgba(4, 6, 13, 0) 55%, rgba(4, 6, 13, 0.45) 100%);
+}
+
+/* Animated conic glow used behind hero + featured */
+@keyframes aura-spin {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.15);
+  }
+  to {
+    transform: rotate(360deg) scale(1);
+  }
+}
+.aura {
+  animation: aura-spin 28s linear infinite;
+}
+
+/* Floating spec chips */
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+.float-slow {
+  animation: float-y 7s ease-in-out infinite;
+}
+.float-slower {
+  animation: float-y 9s ease-in-out 1.2s infinite;
+}
+
+/* Scroll indicator line */
+@keyframes scroll-line {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+.scroll-line {
+  animation: scroll-line 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+/* Moving light reflection across surfaces */
+@keyframes sheen {
+  0% {
+    transform: translateX(-120%) skewX(-18deg);
+  }
+  100% {
+    transform: translateX(240%) skewX(-18deg);
+  }
+}
+.sheen::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+  animation: sheen 5.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Letter-by-letter reveal helper */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.6em) rotate(1.5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+.rise {
+  display: inline-block;
+  animation: rise-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Starfield — slow cosmic drift + gentle twinkle */
+@keyframes star-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-3%, 1.5%, 0);
+  }
+}
+@keyframes star-twinkle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .rise {
+    opacity: 1;
+    animation: none;
+  }
+}
