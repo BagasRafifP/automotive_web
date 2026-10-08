@@ -3,9 +3,9 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath, URL } from 'node:url'
 
-// Served from the /automotive_web/ path on GitHub Pages, so the base matches
-// that prefix and every emitted URL is absolute under it.
-const BASE = '/automotive_web/'
+// Served at the domain root (Vercel). Set this back to '/automotive_web/' if
+// deploying under a GitHub Pages project path again.
+const BASE = '/'
 
 // The Vite entry is app.html so the repository root index.html can hold the
 // deployed single-file build that GitHub Pages serves.
