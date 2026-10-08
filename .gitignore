@@ -19,6 +19,7 @@ Thumbs.db
 .env.*
 
 # Session scratch files
+scratch/
 fetch-cars*.ps1
 commons-credits*.json
 contact-sheet*.html

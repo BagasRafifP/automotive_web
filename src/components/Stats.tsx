@@ -1,5 +1,6 @@
 import { animate, useInView, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { CARS } from "@/data/cars";
 import { Reveal } from "@/components/Reveal";
 
 function Counter({
@@ -45,11 +46,27 @@ function Counter({
   );
 }
 
+// Derived from the catalog so the headline numbers stay true as cars are added.
 const STATS = [
-  { value: 12, label: "Curated Icons", decimals: 0, suffix: "" },
-  { value: 7918, label: "Combined Horsepower", decimals: 0, suffix: " HP" },
-  { value: 1.81, label: "Fastest 0–100 km/h", decimals: 2, suffix: " S" },
-  { value: 412, label: "Top Speed Record", decimals: 0, suffix: " KM/H" },
+  { value: CARS.length, label: "Machines Catalogued", decimals: 0, suffix: "" },
+  {
+    value: CARS.reduce((total, car) => total + car.horsepower, 0),
+    label: "Combined Horsepower",
+    decimals: 0,
+    suffix: " HP",
+  },
+  {
+    value: Math.min(...CARS.map((car) => car.zeroToHundred)),
+    label: "Fastest 0–100 km/h",
+    decimals: 2,
+    suffix: " S",
+  },
+  {
+    value: Math.max(...CARS.map((car) => car.topSpeed)),
+    label: "Top Speed Record",
+    decimals: 0,
+    suffix: " KM/H",
+  },
 ];
 
 export function Stats() {

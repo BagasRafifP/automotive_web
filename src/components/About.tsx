@@ -1,9 +1,10 @@
+import { BRANDS } from "@/data/cars";
 import { Reveal } from "@/components/Reveal";
 
 const PRINCIPLES = [
   {
     title: "Curation over noise",
-    body: "Every car earns its place. No endless catalogue — twelve machines that each changed what driving could feel like, on display for their story.",
+    body: `Every car earns its place. ${BRANDS.length} marques, one standard — machines chosen for what they changed about driving, on display for their story.`,
   },
   {
     title: "Numbers with context",

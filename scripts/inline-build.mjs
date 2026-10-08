@@ -1,5 +1,5 @@
-import { readFileSync, writeFileSync, existsSync, rmSync } from "node:fs";
-import { join } from "node:path";
+import { readFileSync, writeFileSync, existsSync, rmSync, readdirSync } from "node:fs";
+import { join, basename } from "node:path";
 
 // Vite emits dist/app.html (its configured entry). This step inlines the CSS
 // and JS into that document, writes it as dist/index.html, and removes the
@@ -7,7 +7,29 @@ import { join } from "node:path";
 const dist = join(process.cwd(), "dist");
 const appPath = join(dist, "app.html");
 const indexPath = join(dist, "index.html");
-const readAsset = (ref) => readFileSync(join(dist, ref.replace(/^\.?\//, "")), "utf8");
+
+// Emitted refs carry the configured base (e.g. "/automotive_web/assets/x.js")
+// which does not exist on disk under dist, so locate the file by name.
+const findByBasename = (dir, name) => {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      const hit = findByBasename(full, name);
+      if (hit) return hit;
+    } else if (entry.name === name) {
+      return full;
+    }
+  }
+  return null;
+};
+
+const readAsset = (ref) => {
+  const rel = decodeURIComponent(ref).replace(/^\.?\//, "");
+  const direct = join(dist, rel);
+  const resolved = existsSync(direct) ? direct : findByBasename(dist, basename(rel));
+  if (!resolved) throw new Error(`Could not resolve built asset: ${ref}`);
+  return readFileSync(resolved, "utf8");
+};
 
 let html = readFileSync(appPath, "utf8");
 

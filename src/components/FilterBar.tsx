@@ -32,7 +32,7 @@ const SELECTS: { key: keyof Omit<Filters, "query">; label: string; options: read
   { key: "country", label: "Country", options: COUNTRIES },
   { key: "bodyType", label: "Body Type", options: BODY_TYPES },
   { key: "engineType", label: "Engine", options: ENGINE_TYPES },
-  { key: "perf", label: "Performance", options: PERF_CATEGORIES },
+  { key: "perf", label: "Class", options: PERF_CATEGORIES },
 ];
 
 export function applyFilters(filters: Filters) {

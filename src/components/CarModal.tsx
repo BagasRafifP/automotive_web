@@ -32,7 +32,7 @@ export function CarModal({ car, onClose }: { car: Car | null; onClose: () => voi
     };
   }, [car, onClose]);
 
-  const images = car ? [car.image, ...car.gallery] : [];
+  const images = car ? [...new Set([car.image, ...car.gallery])] : [];
 
   return (
     <AnimatePresence>

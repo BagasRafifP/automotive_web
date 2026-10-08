@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
-import { type Car } from "@/data/cars";
+import { CARS, type Car } from "@/data/cars";
 import { CarCard } from "@/components/CarCard";
 import { SectionHeading } from "@/components/Reveal";
 import { EMPTY_FILTERS, FilterBar, applyFilters, type Filters } from "@/components/FilterBar";
@@ -25,9 +25,9 @@ export function Collection({ onSelect }: { onSelect: (car: Car) => void }) {
           }
         />
         <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted">
-          Twelve machines on display. Browse the collection by brand, origin,
-          body style, engine philosophy or performance tier — a showcase for
-          the love of machines, not a showroom for sale.
+          {CARS.length} machines on display. Browse the collection by brand,
+          origin, body style, engine philosophy or performance tier — a
+          showcase for the love of machines, not a showroom for sale.
         </p>
 
         <div className="mt-10">
